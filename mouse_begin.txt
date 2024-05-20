@@ -1,0 +1,41 @@
+0	38	434	1.0	begin
+0	38	434	0.2	open Muses 9-HS
+0	52	819	5.0	Fl (fluorescence)
+0	51	127	1.0	Ac (acquisition)
+0	1196	715	1.0	Approve calibration
+0	49	1005	1.0	450 exitation
+0	43	257	1.0	Composite image
+0	1047	715	13.0	Cancel
+0	49	1005	1.0	450 exitation
+0	43	257	1.0	Composite image
+0	1121	711	10.0	Modify
+0	779	586	1.0	First window
+2	Key.backspace	_	1.0	remove content
+2	Key.backspace	_	0.4	
+2	Key.backspace	_	0.4	
+1	685	_	1.0	input
+0	930	589	1.0	second window
+2	Key.backspace	_	1.0	remove content
+2	Key.backspace	_	0.4	
+2	Key.backspace	_	0.4	
+1	720	_	1.0	input wavelength
+0	1089	586	1.0	third windows
+2	Key.backspace	_	1.0	remove content
+2	Key.backspace	_	0.4	
+2	Key.backspace	_	0.4	
+1	740	_	1.0	input wavelength
+0	1155	655	1.0	continue
+0	1192	712	1.0	continue
+0	1192	712	1.0	continue
+0	1747	35	18.0	save
+0	559	627	1.0	input file name
+1	file	_	1.0	
+0	974	695	1.0	save
+0	1195	713	1.0	OK
+0	47	564	2.0	exit
+0	48	559	2.0	exit
+3	48	559	2.0	Screenshot
+0	45	754	3.0	bright field
+0	48	142	2.0	Acqusition
+0	1187	709	3.0	Approve calibration
+0	48	456	2.0	Spectral cube
