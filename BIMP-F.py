@@ -42,16 +42,21 @@ except:
         exit()
     import matplotlib.pyplot as plt
 
-a = 1
-print('''The images will be masked to find the boundaries of spots with increased intensity.
+
+response_4 = input('''The images will be masked to find the boundaries of spots with increased intensity.
 All that is below (Mean + A * Standard_Deviation) will be shown black.
-The default A is 1. Do you want to change the A coefficient? (Y/N): ''')
-response_4 = input()
+The default A is 1.2. Do you want to change the A coefficient? (Y/N): ''')
+a = 1.2
 if response_4 in positive_responses:
     a = float(input('Input A coefficient (example -1.5): '))
     print('A coefficient now is: ' + str(a))
-response_5 = input('Do you want to invert images? (Y/N): ')
+response_5 = input('Do you want to write masked images into files? (Y/N) ')
 if response_5 in positive_responses:
+    write_masked_images = True
+else:
+    write_masked_images = False
+response_6 = input('Do you want to invert images? (Y/N): ')
+if response_6 in positive_responses:
     inverting = True
 else:
     inverting = False
@@ -112,7 +117,7 @@ q - to quit the program
 image_extensions = ['.png', '.jpg', '.jpeg', '.bmp']
 image_files = []
 for file in files:
-    if file[-4:] in image_extensions:
+    if (file[-4:] in image_extensions) and ('masked_' not in file):
         image_files.append(file)
 
 n = 0
@@ -127,12 +132,14 @@ while True:
         image = 255 - image  # inverting image
     # Making the mask
     image_data = np.array(image)
-    image_mean = int(image_data.mean() + a * image_data.std())
-    smoothed_image = cv2.GaussianBlur(image, (9, 9), 6)
-    mask = cv2.inRange(smoothed_image, np.array([image_mean, image_mean, image_mean]),
-                       np.array([255, 255, 255]))
+    image_masking_limit = int(image_data.mean() + a * image_data.std())
+    # image_masking_limit = 130
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    smoothed_image = cv2.GaussianBlur(gray_image, (9, 9), 6)
+    mask = cv2.inRange(smoothed_image, image_masking_limit, 255)
     image = cv2.bitwise_and(image, image, mask=mask)
-
+    if write_masked_images:
+        cv2.imwrite('masked_' + file, image)
     clone = image.copy()
     max_width = 800
     max_height = 600
@@ -160,6 +167,7 @@ while True:
                 cv2.fillPoly(mask, [pts], (255, 255, 255))
 
                 result = cv2.bitwise_and(clone, clone, mask=mask)
+                gray_result = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY)
                 reshaped = result.reshape((-1, 3)).transpose()
                 gray = np.mean(reshaped, axis=0)
                 gray_mean = np.mean(gray[gray > 0])
@@ -203,7 +211,7 @@ while True:
                          str(green_mean) + '\t' + str(green_median) + '\t' + str(green_std) + '\t' + str(green_n) +
                          '\t' + str(blue_mean) + '\t' + str(blue_median) + '\t' + str(blue_std) + '\t' + str(blue_n)
                          + '\n')
-                plt.hist(result[result > 0], bins=32, color='skyblue', edgecolor='black')
+                plt.hist(gray_result[gray_result > 0], bins=32, color='skyblue', edgecolor='black')
                 plt.savefig(hist_folder + '/fig' + str(counter) + '.png')
                 plt.clf()
             image = cv2.resize(clone, None, fx=scale, fy=scale)
